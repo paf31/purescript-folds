@@ -2,5 +2,5 @@
 
 Applicative Folds, in the style of Gabriel Gonzalez' foldl library
 
-- [docs/Control/Fold.md](Module Documentation)
-- [test/Main.purs](Example)
+- [Module Documentation](docs/Control/Fold.md)
+- [Example](test/Main.purs)
