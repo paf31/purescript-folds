@@ -1,8 +1,7 @@
 module Test.Main where
 
 import Prelude
-import Control.Comonad (extend, extract)
-import Control.Fold (Fold, foldl, scanl, length, sum)
+import Control.Fold (Fold, scanl, length, sum)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
 
