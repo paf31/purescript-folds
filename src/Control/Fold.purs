@@ -58,7 +58,7 @@ import Data.Traversable as Traversable
 
 -- | A left fold, which takes zero or more values of type `a` as input
 -- | and produces output of type `b`.
-data Fold a b = Fold { step :: a -> Fold a b, finish :: Unit -> b }
+newtype Fold a b = Fold { step :: a -> Fold a b, finish :: Unit -> b }
 
 -- | Step a fold by providing a single input.
 stepFold :: forall a b. a -> Fold a b -> Fold a b

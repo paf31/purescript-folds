@@ -22,7 +22,7 @@ This library is based on the `foldl` library by Gabriel Gonzalez:
 #### `Fold`
 
 ``` purescript
-data Fold a b
+newtype Fold a b
 ```
 
 A left fold, which takes zero or more values of type `a` as input
