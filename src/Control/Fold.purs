@@ -42,19 +42,18 @@ module Control.Fold
   ) where
 
 import Prelude
-
+import Data.Foldable as Foldable
+import Data.Traversable as Traversable
 import Control.Alt ((<|>))
 import Control.Apply (lift2)
 import Control.Comonad (class Comonad, extract)
 import Control.Extend (class Extend)
 import Data.Foldable (class Foldable)
-import Data.Foldable as Foldable
 import Data.HeytingAlgebra (ff, tt)
 import Data.Maybe (Maybe(..))
 import Data.Monoid (class Monoid, mempty)
 import Data.Profunctor (class Profunctor, dimap, lmap)
 import Data.Traversable (class Traversable)
-import Data.Traversable as Traversable
 
 -- | A left fold, which takes zero or more values of type `a` as input
 -- | and produces output of type `b`.
