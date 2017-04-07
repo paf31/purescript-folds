@@ -7,12 +7,12 @@
     "output"
   ],
   "dependencies": {
-    "purescript-control": "^2.0.0",
-    "purescript-profunctor": "^2.0.0"
+    "purescript-control": "^3.0.0",
+    "purescript-profunctor": "^3.0.0"
   },
   "devDependencies": {
-    "purescript-console": "^2.0.0",
-    "purescript-psci-support": "^2.0.0"
+    "purescript-console": "^3.0.0",
+    "purescript-psci-support": "^3.0.0"
   },
   "license": "MIT",
   "repository": {
