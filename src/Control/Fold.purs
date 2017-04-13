@@ -39,6 +39,7 @@ module Control.Fold
   , minimum
   , elem
   , notElem
+  , distributed
   ) where
 
 import Prelude
@@ -48,11 +49,14 @@ import Control.Alt ((<|>))
 import Control.Apply (lift2)
 import Control.Comonad (class Comonad, extract)
 import Control.Extend (class Extend)
+import Data.Distributive (class Distributive, cotraverse)
 import Data.Foldable (class Foldable)
+import Data.Function (applyFlipped)
 import Data.HeytingAlgebra (ff, tt)
 import Data.Maybe (Maybe(..))
 import Data.Monoid (class Monoid, mempty)
 import Data.Profunctor (class Profunctor, dimap, lmap)
+import Data.Profunctor.Closed (class Closed, closed)
 import Data.Traversable (class Traversable)
 
 -- | A left fold, which takes zero or more values of type `a` as input
@@ -88,6 +92,10 @@ foldl fold xs = extract (Foldable.foldl (\(Fold o) -> o.step) fold xs)
 -- | `Data.Traversable`.
 scanl :: forall f a b. Traversable f => Fold a b -> f a -> f b
 scanl fold xs = map extract (Traversable.scanl (\(Fold o) -> o.step) fold xs)
+
+-- | Fold over entire collections of inputs, producing a collection of outputs.
+distributed :: forall f a b. Distributive f => Fold a b -> Fold (f a) (f b)
+distributed = dimap applyFlipped (flip cotraverse id) <<< closed
 
 -- | `Fold` values in some `Monoid`.
 mconcat :: forall m. Monoid m => Fold m m
@@ -162,6 +170,9 @@ instance profunctorFold :: Profunctor Fold where
     where
       step = f >>> o.step >>> dimap f g
       finish = o.finish >>> g
+
+instance closedFold :: Closed Fold where
+  closed f = unfoldFold (const f) (lift2 (flip stepFold)) (extract <<< _)
 
 instance functorFold :: Functor (Fold a) where
   map f (Fold o) = Fold { step, finish }
