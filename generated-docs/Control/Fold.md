@@ -31,6 +31,7 @@ and produces output of type `b`.
 ##### Instances
 ``` purescript
 Profunctor Fold
+Closed Fold
 Functor (Fold a)
 Apply (Fold a)
 Applicative (Fold a)
@@ -86,6 +87,14 @@ scanl :: forall f a b. Traversable f => Fold a b -> f a -> f b
 Run a `Fold` by providing a `Traversable` container of inputs, and
 generating an output for each input. This is analogous to the `scanl` function from
 `Data.Traversable`.
+
+#### `distributed`
+
+``` purescript
+distributed :: forall f a b. Distributive f => Fold a b -> Fold (f a) (f b)
+```
+
+Fold over entire collections of inputs, producing a collection of outputs.
 
 #### `mconcat`
 
