@@ -55,7 +55,7 @@ import Data.Function (applyFlipped)
 import Data.HeytingAlgebra (ff, tt)
 import Data.Maybe (Maybe(..))
 import Data.Monoid (class Monoid, mempty)
-import Data.Profunctor (class Profunctor, dimap, lmap)
+import Data.Profunctor (class Profunctor, dimap, lcmap)
 import Data.Profunctor.Closed (class Closed, closed)
 import Data.Traversable (class Traversable)
 
@@ -79,7 +79,7 @@ unfoldFold s0 step finish = go s0
 -- | that state. This is a variant of `unfoldFold` where the output is the state
 -- | itself.
 unfoldFold_ :: forall a b. b -> (b -> a -> b) -> Fold a b
-unfoldFold_ s0 step = unfoldFold s0 step id
+unfoldFold_ s0 step = unfoldFold s0 step identity
 
 -- | Run a `Fold` by providing a `Foldable` container of inputs, and then
 -- | generating a single output. This is analogous to the `foldl` function from
@@ -95,7 +95,7 @@ scanl fold xs = map extract (Traversable.scanl (\(Fold o) -> o.step) fold xs)
 
 -- | Fold over entire collections of inputs, producing a collection of outputs.
 distributed :: forall f a b. Distributive f => Fold a b -> Fold (f a) (f b)
-distributed = dimap applyFlipped (flip cotraverse id) <<< closed
+distributed = dimap applyFlipped (flip cotraverse identity) <<< closed
 
 -- | `Fold` values in some `Monoid`.
 mconcat :: forall m. Monoid m => Fold m m
@@ -130,12 +130,12 @@ or = unfoldFold_ ff disj
 -- | A `Fold` which tests if _all_ of its inputs satisfy some predicate
 -- | (generalized to work with an arbitrary `HeytingAlgebra`).
 all :: forall a b. HeytingAlgebra b => (a -> b) -> Fold a b
-all pred = lmap pred and
+all pred = lcmap pred and
 
 -- | A `Fold` which tests if _any_ of its inputs satisfy some predicate
 -- | (generalized to work with an arbitrary `HeytingAlgebra`).
 any :: forall a b. HeytingAlgebra b => (a -> b) -> Fold a b
-any pred = lmap pred or
+any pred = lcmap pred or
 
 -- | A `Fold` which computes the sum of its inputs
 -- | (generalized to work with an arbitrary `Semiring`).
