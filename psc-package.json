@@ -1,7 +1,7 @@
 {
     "name": "folds",
     "source": "https://github.com/purescript/package-sets.git",
-    "set": "psc-0.10.1",
+    "set": "psc-0.12.3-20190312",
     "depends": [
       "bifunctors",
       "control",
@@ -11,8 +11,8 @@
       "identity",
       "invariant",
       "maybe",
-      "monoid",
       "newtype",
+      "ordered-collections",
       "prelude",
       "profunctor",
       "tuples"

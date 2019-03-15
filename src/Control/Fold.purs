@@ -53,7 +53,8 @@ import Data.Distributive (class Distributive, cotraverse)
 import Data.Foldable (class Foldable)
 import Data.Function (applyFlipped)
 import Data.HeytingAlgebra (ff, tt)
-import Data.Maybe (Maybe(..))
+import Data.Map (Map, alter)
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Monoid (class Monoid, mempty)
 import Data.Profunctor (class Profunctor, dimap, lcmap)
 import Data.Profunctor.Closed (class Closed, closed)
@@ -164,6 +165,14 @@ elem a = any (_ == a)
 -- | A `Fold` which tests if a specific value did not appear as an input.
 notElem :: forall a. Eq a => a -> Fold a Boolean
 notElem a = all (_ /= a)
+
+-- | Perform a `Fold` while grouping the data according to a specified
+-- | group projection function. Returns the folded result grouped as a
+-- | map keyed by the group.
+groupBy :: forall a r g . Ord g => (a -> g) -> Fold a r -> Fold a (Map g r)
+groupBy grouper f1 = unfoldFold mempty combine (map extract)
+  where
+    combine m x = alter (pure <<< stepFold x <<< fromMaybe f1) (grouper x) m
 
 instance profunctorFold :: Profunctor Fold where
   dimap f g (Fold o) = Fold { step, finish }
