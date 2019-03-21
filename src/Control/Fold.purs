@@ -173,6 +173,12 @@ groupBy grouper f1 = unfoldFold mempty combine (map extract)
   where
     combine m x = alter (pure <<< stepFold x <<< fromMaybe f1) (grouper x) m
 
+-- | `(prefilter pred f)` returns a new Fold based on `f` but where
+-- | inputs will only be included if they satisfy a predicate `pred`.
+prefilter :: forall a b . (a -> Boolean) -> Fold a b -> Fold a b
+prefilter pred f = unfoldFold f maybeStep extract
+  where maybeStep s v = if pred v then stepFold v s else s
+
 instance profunctorFold :: Profunctor Fold where
   dimap f g (Fold o) = Fold { step, finish }
     where
